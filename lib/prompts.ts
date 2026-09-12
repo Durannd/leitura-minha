@@ -8,11 +8,16 @@ export const SISTEMA_ADAPTADOR = [
   "2. Se uma informação existe no original, ela precisa continuar existindo na adaptação.",
   "3. Não infira diagnóstico, condição ou deficiência da pessoa. Você só conhece as preferências listadas.",
   "4. Não seja condescendente. Texto simples não é texto infantil.",
-  "5. Responda em português do Brasil, no mesmo registro do original.",
+  "5. Escreva NO MESMO IDIOMA do texto original. Se o artigo está em inglês, a adaptação sai em inglês. Adaptar não é traduzir.",
+  "6. Cubra o texto inteiro, do começo ao fim. Nunca pare no meio nem resuma o final em uma frase: se o espaço apertar, encurte as frases, não corte assuntos.",
+  "7. Mantenha a ordem das ideias do original. A pessoa pode querer conferir contra a página.",
+  "8. Não adicione conclusão, opinião ou chamada para ação que o original não tenha.",
 ].join("\n");
 
 export function instrucaoDasRegras(regras: Regra[], limites: { palavrasPorFrase: number; frasesPorBloco: number }): string {
-  if (regras.length === 0) return "Nenhuma preferência registrada: preserve a estrutura original, apenas quebre parágrafos com mais de 6 frases.";
+  if (regras.length === 0) {
+    return "Nenhuma preferência registrada ainda. Preserve a estrutura e o conteúdo do original; apenas quebre parágrafos com mais de 5 frases e dê a cada bloco um subtítulo curto quando houver mudança clara de assunto.";
+  }
   const mapa: Record<string, string> = {
     "frase-curta": `Nenhuma frase passa de ${limites.palavrasPorFrase} palavras. Quebre frases longas em duas.`,
     "passos-numerados": "Quando o texto descreve um processo, uma ordem ou uma sequência, transforme em blocos do tipo passo, numerados.",
@@ -26,5 +31,10 @@ export function instrucaoDasRegras(regras: Regra[], limites: { palavrasPorFrase:
     "paleta-calma": "",
   };
   const linhas = regras.map((r) => mapa[r.id]).filter(Boolean);
-  return `Preferências desta pessoa (ela mesma aprovou cada uma):\n${linhas.map((l) => `- ${l}`).join("\n")}`;
+  return [
+    "Preferências desta pessoa (ela mesma aprovou cada uma):",
+    ...linhas.map((l) => `- ${l}`),
+    "",
+    "Estas preferências mudam a FORMA. Nenhuma delas autoriza remover informação do original.",
+  ].join("\n");
 }

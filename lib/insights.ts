@@ -31,12 +31,14 @@ export const SISTEMA_INSIGHTS = [
   "5. Produza de 3 a 5 insights. Antes de fechar, percorra explicitamente a lista de concorrentes e a lista de campanhas: se um movimento de concorrente listado aparece no artigo (mesmo sem o nome dele), esse é o insight mais valioso e não pode faltar. Se uma campanha tem PROBLEMA ATUAL e o artigo toca nesse problema, idem.",
   "5b. Se o artigo sugere algo que está nas restrições, escreva um insight do tipo contradicao explicando por que não serve para esta empresa. Isso vale mais que silêncio.",
   "6. Ação em imperativo, executável esta semana, específica o bastante para alguém fazer sem perguntar nada.",
-  "7. Português do Brasil, direto, sem jargão de consultoria.",
+  "7. Português do Brasil, direto, sem jargão de consultoria — mesmo quando o artigo está em outro idioma. A ÂNCORA, porém, é copiada no idioma original do artigo, literalmente.",
+  "8. Nunca repita o que o artigo diz sem conectar a algo concreto da empresa. Se o insight funcionaria para qualquer empresa, ele está errado.",
   "Tipos: concorrente (movimento de um concorrente citado ou implicado), campanha (afeta campanha em andamento), oportunidade (algo novo a fazer), contradicao (o artigo contraria o posicionamento ou a mensagem atual), risco (ameaça ao que está rodando).",
 ].join("\n");
 
-export function contextoComoTexto(c: ContextoEmpresa): string {
+export function contextoComoTexto(c: ContextoEmpresa & { quemLe?: string }): string {
   return [
+    c.quemLe ? `QUEM ESTÁ LENDO: ${c.quemLe}. Escreva os insights para esta pessoa, no escopo do trabalho dela.` : "",
     `EMPRESA: ${c.empresa}`,
     `O QUE VENDE: ${c.oQueVende}`,
     `ICP: ${c.icp}`,

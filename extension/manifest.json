@@ -8,6 +8,12 @@
   "host_permissions": ["http://localhost:3010/*"],
   "background": { "service_worker": "background.js", "type": "module" },
   "action": { "default_title": "Adaptar esta página" },
+  "commands": {
+    "falar": {
+      "suggested_key": { "default": "Ctrl+Shift+V", "mac": "Command+Shift+V" },
+      "description": "Falar um comando de leitura"
+    }
+  },
   "side_panel": { "default_path": "painel.html" },
   "content_scripts": [
     {

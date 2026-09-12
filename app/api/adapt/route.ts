@@ -59,7 +59,8 @@ export async function POST(req: Request) {
     return responder({ erro: "Esta página não parece ter um artigo para adaptar." }, 422);
   }
   const perfil = (body?.perfil ?? perfilNovo()) as Perfil;
-  const contexto = (body?.contexto ?? CONTEXTO_DEMO) as ContextoEmpresa;
+  /** Sem contexto do usuário não geramos insight: insight genérico é pior que insight nenhum. */
+  const contexto = (body?.contexto ?? null) as ContextoEmpresa | null;
   const automaticas = regrasAutomaticas(perfil);
   const aTestar = regrasATestar(perfil);
 
@@ -116,17 +117,19 @@ export async function POST(req: Request) {
         max_tokens: teto,
         ...extra,
       }),
-      client.chat.completions.parse({
-        model: id,
-        messages: [
-          { role: "system", content: SISTEMA_INSIGHTS },
-          { role: "system", content: contextoComoTexto(contexto) },
-          { role: "user", content: `Artigo lido — título: ${titulo}\nFonte: ${body?.url ?? "—"}\n\n${texto}` },
-        ],
-        response_format: zodResponseFormat(Insights, "insights"),
-        max_tokens: teto,
-        ...extra,
-      }),
+      contexto
+        ? client.chat.completions.parse({
+            model: id,
+            messages: [
+              { role: "system", content: SISTEMA_INSIGHTS },
+              { role: "system", content: contextoComoTexto(contexto) },
+              { role: "user", content: `Artigo lido — título: ${titulo}\nFonte: ${body?.url ?? "—"}\n\n${texto}` },
+            ],
+            response_format: zodResponseFormat(Insights, "insights"),
+            max_tokens: teto,
+            ...extra,
+          })
+        : Promise.resolve(null),
     ]);
 
     if (rAdapt.status === "fulfilled") {
@@ -136,14 +139,14 @@ export async function POST(req: Request) {
       console.error("[adapt] adaptação falhou:", rAdapt.reason?.message);
     }
 
-    if (rInsight.status === "fulfilled") {
+    if (rInsight.status === "fulfilled" && rInsight.value) {
       const crus = rInsight.value.choices[0]?.message.parsed?.insights ?? [];
       // Insight sem âncora literal no artigo é descartado: é a defesa contra alucinação.
       const v = validarAncoras(crus, texto);
       insights = v.validos.slice(0, 6);
       descartados = v.descartados;
-    } else {
-      console.error("[adapt] insights falharam:", rInsight.reason?.message);
+    } else if (rInsight.status === "rejected") {
+      console.error("[adapt] insights falharam:", (rInsight.reason as Error)?.message);
     }
   }
 
@@ -160,7 +163,9 @@ export async function POST(req: Request) {
     insights,
     /** Quantos o modelo propôs sem âncora real no texto e foram jogados fora. Vai na tela: é prova de rigor. */
     insightsDescartados: descartados,
-    empresa: { nome: contexto.empresa, versao: contexto.versao, campanhasAtivas: contexto.campanhas.filter((c) => c.status === "ativa").length, concorrentes: contexto.concorrentes.length },
+    empresa: contexto
+      ? { nome: contexto.empresa, versao: contexto.versao, campanhasAtivas: contexto.campanhas.filter((c) => c.status === "ativa").length, concorrentes: contexto.concorrentes.length }
+      : null,
     /** O que foi aplicado sozinho vs. o que ainda precisa de aprovação. A extensão usa isto para decidir o card. */
     aplicadasAutomaticamente: automaticas.map((r) => ({ id: r.id, rotulo: r.rotulo, confianca: r.confianca })),
     /** O card só aparece para o que ainda não virou automático. Cada item traz a evidência que o motivou. */

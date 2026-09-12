@@ -1,63 +1,105 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>Seu perfil de leitura</title>
+<title>Leitura Minha</title>
 <style>
-  :root{color-scheme:light dark}
-  body{font:14px/1.55 system-ui,-apple-system,sans-serif;margin:0;padding:18px;color:#15171a;background:#fbfbfc}
-  h1{font-size:15px;margin:0 0 4px}
-  .sub{font-size:12.5px;color:#6b7077;margin:0 0 18px}
+  *{box-sizing:border-box}
+  body{font:14px/1.55 system-ui,-apple-system,sans-serif;margin:0;padding:16px;color:#15171a;background:#fbfbfc}
+  .abas{display:flex;gap:4px;background:#eceef0;padding:3px;border-radius:10px;margin-bottom:16px}
+  .abas button{flex:1;padding:7px 10px;border:0;border-radius:8px;background:transparent;font:600 12.5px system-ui;color:#5a6069;cursor:pointer}
+  .abas button.on{background:#fff;color:#15171a;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  .sub{font-size:12.5px;color:#6b7077;margin:0 0 16px}
   .vazio{border:1px dashed #d6d9dd;border-radius:10px;padding:18px;text-align:center;color:#80868e;font-size:13px}
+  .acoes{display:flex;gap:7px;margin:0 0 18px;flex-wrap:wrap}
+  button.b{padding:9px 13px;border:1px solid #d9dcdf;border-radius:9px;background:#fff;cursor:pointer;font:500 12.5px system-ui;color:#15171a}
+  button.b.p{background:#111;color:#fff;border-color:#111}
+  h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:#858b93;margin:20px 0 8px}
+  /* perfil */
   .r{border:1px solid #e4e6e9;border-radius:11px;padding:12px 13px;margin-bottom:9px;background:#fff}
   .r .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .r b{font-size:13.5px}
   .r .motivo{font-size:12.5px;color:#6b7077;margin-top:3px;font-style:italic}
   .bar{height:5px;border-radius:3px;background:#eceef0;margin-top:9px;overflow:hidden}
-  .bar i{display:block;height:100%;background:#111;border-radius:3px}
+  .bar i{display:block;height:100%;background:#111;border-radius:3px;transition:width .3s}
   .meta{display:flex;justify-content:space-between;font-size:11.5px;color:#858b93;margin-top:5px}
   .auto{background:#111;color:#fff;font:600 10px system-ui;letter-spacing:.04em;padding:3px 7px;border-radius:999px;text-transform:uppercase}
   .testando{background:#f0f1f3;color:#5a6069;font:600 10px system-ui;letter-spacing:.04em;padding:3px 7px;border-radius:999px;text-transform:uppercase}
-  .acoes{display:flex;gap:7px;margin:18px 0 22px;flex-wrap:wrap}
-  button{padding:9px 13px;border:1px solid #d9dcdf;border-radius:9px;background:#fff;cursor:pointer;font:500 12.5px system-ui;color:#15171a}
-  button.p{background:#111;color:#fff;border-color:#111}
-  h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#858b93;margin:22px 0 8px}
-  .h{font-size:12.5px;color:#4a4f56;padding:7px 0;border-bottom:1px solid #eceef0}
-  .h span{color:#9aa0a8;margin-right:7px;font-variant-numeric:tabular-nums}
-  .emp{border:1px solid #e4e6e9;border-radius:11px;padding:12px 13px;background:#fff;margin-bottom:9px}
-  .emp .nome{font:600 13.5px system-ui;display:flex;align-items:center;gap:7px}
-  .emp .nome i{width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;flex:none}
-  .emp .pos{font-size:12.5px;color:#5a6069;margin-top:6px;line-height:1.5}
-  .camp{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:8px 0;border-bottom:1px solid #f0f1f3}
-  .camp:last-child{border-bottom:0}
-  .dot{width:7px;height:7px;border-radius:50%;margin-top:6px;flex:none}
-  .camp b{display:block;font-size:12.5px}
-  .camp span{color:#858b93;font-size:11.5px}
-  .conc{font-size:12.5px;padding:7px 0;border-bottom:1px solid #f0f1f3;color:#4a4f56}
-  .conc:last-child{border-bottom:0}
-  .conc b{display:block}
-  switch{display:none}
   .sw{position:relative;width:34px;height:19px;flex:none}
   .sw input{opacity:0;width:0;height:0}
   .sw i{position:absolute;inset:0;background:#d5d8dc;border-radius:999px;transition:.15s;cursor:pointer}
   .sw i::after{content:"";position:absolute;width:15px;height:15px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.15s}
   .sw input:checked + i{background:#111}
   .sw input:checked + i::after{transform:translateX(15px)}
+  .h{font-size:12.5px;color:#4a4f56;padding:7px 0;border-bottom:1px solid #eceef0}
+  .h span{color:#9aa0a8;margin-right:7px;font-variant-numeric:tabular-nums}
+  /* contexto */
+  label{display:block;font:600 11.5px system-ui;text-transform:uppercase;letter-spacing:.05em;color:#858b93;margin:14px 0 5px}
+  label .dica{display:block;text-transform:none;letter-spacing:0;font:400 11.5px system-ui;color:#9aa0a8;margin-top:2px}
+  input[type=text],textarea{width:100%;padding:9px 10px;border:1px solid #dcdfe2;border-radius:9px;font:400 13px/1.5 system-ui;background:#fff;color:#15171a;resize:vertical}
+  input[type=text]:focus,textarea:focus{outline:2px solid #111;outline-offset:-1px;border-color:#111}
+  textarea{min-height:62px}
+  .salvo{font:500 12px system-ui;color:#15803d;opacity:0;transition:.2s}
+  .salvo.on{opacity:1}
+  .barrinha{position:sticky;bottom:0;background:linear-gradient(transparent,#fbfbfc 30%);padding:14px 0 2px;display:flex;gap:8px;align-items:center}
 </style>
-<h1>Seu perfil de leitura</h1>
-<p class="sub">Fica no seu navegador. Não sobe para lugar nenhum.</p>
 
-<div class="acoes">
-  <button class="p" id="rodar">Adaptar esta aba</button>
-  <button id="reverter">Ver original</button>
-  <button id="exportar">Exportar JSON</button>
-  <button id="zerar">Zerar</button>
+<div class="abas">
+  <button id="ab-perfil" class="on">Perfil de leitura</button>
+  <button id="ab-ctx">Meu contexto</button>
 </div>
 
-<div id="regras"></div>
+<section id="pg-perfil">
+  <p class="sub">O que eu aprendi sobre como você lê. Fica no seu navegador.</p>
+  <div class="acoes">
+    <button class="b p" id="rodar">Adaptar esta aba</button>
+    <button class="b" id="falar">🎙 Falar um comando</button>
+    <button class="b" id="reverter">Ver original</button>
+    <button class="b" id="exportar">Exportar JSON</button>
+    <button class="b" id="zerar">Zerar</button>
+  </div>
+  <p class="sub" style="margin:-8px 0 14px">Atalhos: <b>Ctrl+Shift+V</b> fala · <b>Ctrl+Shift+D</b> digita o comando na página.</p>
+  <div id="regras"></div>
+  <h2>O que eu aprendi, e quando</h2>
+  <div id="historico"></div>
+</section>
 
-<h2>Contexto da empresa</h2>
-<div id="empresa"></div>
+<section id="pg-ctx" hidden>
+  <p class="sub">Quem você é e o que sua empresa está fazendo. É isto que transforma "resumo do artigo" em "isto afeta a sua campanha". Nada sai do seu navegador sem você adaptar uma página.</p>
 
-<h2>O que eu aprendi, e quando</h2>
-<div id="historico"></div>
+  <label>Seu cargo<span class="dica">ex.: Product Marketing Manager</span></label>
+  <input type="text" id="meuCargo" placeholder="Seu cargo">
+
+  <label>O que você faz<span class="dica">suas responsabilidades reais, do jeito que você contaria a alguém</span></label>
+  <textarea id="oQueEuFaco" placeholder="Cuido de posicionamento, lançamento e inteligência competitiva..."></textarea>
+
+  <label>Empresa</label>
+  <input type="text" id="empresa" placeholder="Nome da empresa">
+
+  <label>O que ela vende</label>
+  <textarea id="oQueVende" placeholder="Produto, para quem, como cobra"></textarea>
+
+  <label>Para quem (ICP)</label>
+  <textarea id="icp" placeholder="Cargo, porte, situação do cliente ideal"></textarea>
+
+  <label>Posicionamento<span class="dica">a frase que te diferencia. O agente avisa quando um artigo contradiz isto.</span></label>
+  <textarea id="posicionamento" placeholder="O que te separa do concorrente"></textarea>
+
+  <label>Tom de voz</label>
+  <textarea id="tomDeVoz" placeholder="Como a marca fala, e como não fala"></textarea>
+
+  <label>Projetos e campanhas<span class="dica">uma por linha — status | nome | canal | público | métrica | problema atual</span></label>
+  <textarea id="campanhasTexto" style="min-height:92px" placeholder="ativa | Ruptura Zero | LinkedIn Ads | Diretor de operações | CPL R$ 340, meta R$ 220 | CPL 55% acima da meta há 3 semanas"></textarea>
+
+  <label>Concorrentes<span class="dica">uma por linha — nome | posicionamento | movimentos separados por ;</span></label>
+  <textarea id="concorrentesTexto" style="min-height:78px" placeholder="Trinks ERP | ERP genérico de varejo | Lançou calculadora gratuita; investe em busca paga"></textarea>
+
+  <label>O que vocês NÃO fazem<span class="dica">uma por linha. Evita sugestão do que já foi descartado.</span></label>
+  <textarea id="restricoesTexto" style="min-height:62px" placeholder="Não fazemos trial gratuito: a implantação exige integração."></textarea>
+
+  <div class="barrinha">
+    <button class="b p" id="salvar">Salvar contexto</button>
+    <button class="b" id="exemplo">Carregar exemplo</button>
+    <span class="salvo" id="salvo">salvo ✓</span>
+  </div>
+</section>
 
 <script src="painel.js"></script>
