@@ -1,0 +1,63 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Seu perfil de leitura</title>
+<style>
+  :root{color-scheme:light dark}
+  body{font:14px/1.55 system-ui,-apple-system,sans-serif;margin:0;padding:18px;color:#15171a;background:#fbfbfc}
+  h1{font-size:15px;margin:0 0 4px}
+  .sub{font-size:12.5px;color:#6b7077;margin:0 0 18px}
+  .vazio{border:1px dashed #d6d9dd;border-radius:10px;padding:18px;text-align:center;color:#80868e;font-size:13px}
+  .r{border:1px solid #e4e6e9;border-radius:11px;padding:12px 13px;margin-bottom:9px;background:#fff}
+  .r .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .r b{font-size:13.5px}
+  .r .motivo{font-size:12.5px;color:#6b7077;margin-top:3px;font-style:italic}
+  .bar{height:5px;border-radius:3px;background:#eceef0;margin-top:9px;overflow:hidden}
+  .bar i{display:block;height:100%;background:#111;border-radius:3px}
+  .meta{display:flex;justify-content:space-between;font-size:11.5px;color:#858b93;margin-top:5px}
+  .auto{background:#111;color:#fff;font:600 10px system-ui;letter-spacing:.04em;padding:3px 7px;border-radius:999px;text-transform:uppercase}
+  .testando{background:#f0f1f3;color:#5a6069;font:600 10px system-ui;letter-spacing:.04em;padding:3px 7px;border-radius:999px;text-transform:uppercase}
+  .acoes{display:flex;gap:7px;margin:18px 0 22px;flex-wrap:wrap}
+  button{padding:9px 13px;border:1px solid #d9dcdf;border-radius:9px;background:#fff;cursor:pointer;font:500 12.5px system-ui;color:#15171a}
+  button.p{background:#111;color:#fff;border-color:#111}
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#858b93;margin:22px 0 8px}
+  .h{font-size:12.5px;color:#4a4f56;padding:7px 0;border-bottom:1px solid #eceef0}
+  .h span{color:#9aa0a8;margin-right:7px;font-variant-numeric:tabular-nums}
+  .emp{border:1px solid #e4e6e9;border-radius:11px;padding:12px 13px;background:#fff;margin-bottom:9px}
+  .emp .nome{font:600 13.5px system-ui;display:flex;align-items:center;gap:7px}
+  .emp .nome i{width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;flex:none}
+  .emp .pos{font-size:12.5px;color:#5a6069;margin-top:6px;line-height:1.5}
+  .camp{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:8px 0;border-bottom:1px solid #f0f1f3}
+  .camp:last-child{border-bottom:0}
+  .dot{width:7px;height:7px;border-radius:50%;margin-top:6px;flex:none}
+  .camp b{display:block;font-size:12.5px}
+  .camp span{color:#858b93;font-size:11.5px}
+  .conc{font-size:12.5px;padding:7px 0;border-bottom:1px solid #f0f1f3;color:#4a4f56}
+  .conc:last-child{border-bottom:0}
+  .conc b{display:block}
+  switch{display:none}
+  .sw{position:relative;width:34px;height:19px;flex:none}
+  .sw input{opacity:0;width:0;height:0}
+  .sw i{position:absolute;inset:0;background:#d5d8dc;border-radius:999px;transition:.15s;cursor:pointer}
+  .sw i::after{content:"";position:absolute;width:15px;height:15px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.15s}
+  .sw input:checked + i{background:#111}
+  .sw input:checked + i::after{transform:translateX(15px)}
+</style>
+<h1>Seu perfil de leitura</h1>
+<p class="sub">Fica no seu navegador. Não sobe para lugar nenhum.</p>
+
+<div class="acoes">
+  <button class="p" id="rodar">Adaptar esta aba</button>
+  <button id="reverter">Ver original</button>
+  <button id="exportar">Exportar JSON</button>
+  <button id="zerar">Zerar</button>
+</div>
+
+<div id="regras"></div>
+
+<h2>Contexto da empresa</h2>
+<div id="empresa"></div>
+
+<h2>O que eu aprendi, e quando</h2>
+<div id="historico"></div>
+
+<script src="painel.js"></script>

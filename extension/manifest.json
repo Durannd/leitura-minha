@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Leitura Minha",
+  "version": "0.1.0",
+  "description": "Adapta a página ao seu jeito de ler. O perfil é seu, fica no seu navegador, e você exporta quando quiser.",
+  "minimum_chrome_version": "116",
+  "permissions": ["storage", "activeTab", "scripting", "sidePanel"],
+  "host_permissions": ["http://localhost:3010/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_title": "Adaptar esta página" },
+  "side_panel": { "default_path": "painel.html" },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}
